@@ -1,0 +1,33 @@
+# Build artifacts
+build/
+example/**/build/
+
+# Dart/Flutter tooling
+.dart_tool/
+.pub/
+pubspec.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+**/*.g.dart
+**/*.freezed.dart
+**/*.pb.dart
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Test artifacts
+test_driver/
