@@ -1,0 +1,21 @@
+name: counter
+description: Clean architecture example using Bolt state management.
+version: 1.0.0
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  bolt:
+    path: ../../
+  flutter_bloc: ^9.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_lint: ^0.3.2
+
+flutter:
+  uses-material-design: true

@@ -27,5 +27,6 @@ base class BoltObserver {
   const BoltObserver();
 
   /// empty , if not used will be tree shaken
+  /// override if needed
   void onAction(BlocBase<dynamic> blocBase, Object action) {}
 }

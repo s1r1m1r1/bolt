@@ -1,11 +1,6 @@
 import 'dart:async';
 
 import 'package:bolt/bolt.dart';
-import 'package:bolt/src/observer.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:signals/signals.dart';
-import 'package:preact_signals/preact_signals.dart' as preact;
-import 'package:test/test.dart';
 
 import 'benchmark_models.dart';
 
@@ -18,6 +13,7 @@ extension _Track on Cubit {
   static log(String name) {
     // print('$name start');
   }
+
   void track(void Function() fn, String name) {
     log('$name start ');
     try {
@@ -45,22 +41,6 @@ class CounterIncrement extends CounterEvent {
 
 class CounterDecrement extends CounterEvent {
   const CounterDecrement();
-}
-
-class CounterSignal extends Signal<int> {
-  CounterSignal() : super(0);
-
-  void increment() {
-    set(
-      value + 1,
-    );
-  }
-
-  Future<void> decrement() async {
-    set(
-      value - 1,
-    );
-  }
 }
 
 /// Cubit implementation for benchmarking
@@ -114,7 +94,6 @@ class SimpleBlocBenchmark extends Bolt<CounterEvent, int> {
   }
 
   Future<void> _decrement() async {
-    // await Future<void>.delayed(const Duration(milliseconds: 1));
     emit(state + 1);
   }
 }
@@ -137,7 +116,6 @@ class BenchmarkRunner {
     print('');
 
     // Run benchmarks
-    await _benchmarkCommand();
     await _benchmarkCubit();
     await _benchmarkBloc();
     await _benchmarkBolt();
@@ -149,8 +127,6 @@ class BenchmarkRunner {
   Future<void> _warmup() async {
     final cubit = CubitBenchmark();
     final bloc = BlocBenchmark();
-    final cmd = CounterSignal();
-    final ntf = BehaviorSubject<int>();
     final bolt = SimpleBlocBenchmark();
 
     for (int i = 0; i < warmupIterations; i++) {
@@ -162,34 +138,6 @@ class BenchmarkRunner {
     cubit.close();
     bloc.close();
     // bolt.close();
-  }
-
-  Future<void> _benchmarkCommand() async {
-    print('\n\n----------------');
-    print('Benchmark: Command Signal');
-
-    final stopwatch = Stopwatch()..start();
-
-    for (int i = 0; i < iterations; i++) {
-      // final cubit = Signal<int>(0);
-      final counter = CounterSignal();
-
-      for (int j = 0; j < 10; j++) {
-        counter.increment();
-        await counter.decrement();
-        // IncrementCommand().call(counter);
-        // DecrementCommand().call(counter);
-      }
-      counter.dispose();
-      // cubit.dispose();
-    }
-
-    stopwatch.stop();
-    final duration = stopwatch.elapsedMicroseconds;
-    final avgPerIteration = duration / iterations;
-
-    print('Total time: $duration microseconds');
-    print('Average per iteration: $avgPerIteration microseconds');
   }
 
   Future<void> _benchmarkCubit() async {
@@ -212,7 +160,6 @@ class BenchmarkRunner {
       for (int j = 0; j < 10; j++) {
         cubit.increment();
         await cubit.decrement();
-        // unawaited();
       }
 
       // Close the subscription and cubit

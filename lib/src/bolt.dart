@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:bolt/src/observer.dart';
 
 /// Bolt simple Bloc implementation ,
-/// simple and fast , without the overhead of a StreamController
+/// simple and fast , without the overhead
 abstract class Bolt<Event extends Object, State> extends BlocBase<State> {
   ///
   Bolt(State initialState) : super(initialState);
