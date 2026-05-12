@@ -19,6 +19,11 @@ Not all state managers scale the same way. Bolt is highly optimized for **real-w
 | **15 Subscribers** | 20.8 | 18.5 | **18.48** | 46.7 | **Riverpod** |
 | **30 Subscribers** | 37.3 | 35.15 | **25.86** | 63.49 | **Riverpod** |
 
+### Architectural Insights
+*   **The Fixed Event Cost:** Bolt maintains a remarkably stable overhead of **~2.1 μs** compared to Cubit across all subscriber counts. This is the exact runtime cost of Dart's type-dispatching (`switch` pattern matching over `sealed` classes). You get a strict event contract virtually for free.
+*   **Cold Start Performance:** In shorter runs (10k iterations), Cubit shines because direct method invocations require less initial JIT-compiler optimization than dynamic type matching.
+*   **The 15-Subscriber Cross:** Riverpod's ultra-cheap notification loop catches up with Cubit/Bolt around the 15-subscriber mark. However, for standard Flutter views (typically 1–5 widgets using `BlocBuilder` per screen), Bolt remains **~10% to 45% faster** than Riverpod while running circles around native `Bloc`.
+
 ### Architectural Insights: Why the lines cross?
 *   **Bolt vs Bloc (10x - 2x speedup):** By removing the inbound stream queue, Bolt reduces processing latency dramatically. The event is dispatched to `onEvent` instantly and synchronously.
 *   **Bolt vs Cubit (The Event-Driven "Tax"):** Bolt runs neck-and-neck with Cubit. Modern Dart VM compiles `sealed` class pattern matching down to highly optimized integer Jump Tables, making the event-driven routing virtually free.
