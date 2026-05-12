@@ -22,6 +22,7 @@ Thumbs.db
 **/*.g.dart
 **/*.freezed.dart
 **/*.pb.dart
+**/dart_tool
 
 # Logs
 *.log
