@@ -16,7 +16,7 @@ abstract class Bolt<Event extends Object, State> extends BlocBase<State> {
     try {
       final result = onEvent(event);
       if (result is Future) {
-        result.catchError(addError);
+        result.catchError((e, s) => errorObserver(this, e, s));
       }
     } catch (e, s) {
       errorObserver(this, e, s);
