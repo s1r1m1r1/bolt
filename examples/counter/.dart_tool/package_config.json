@@ -26,16 +26,16 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "bloc_bolt",
+      "rootUri": "../../../",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "bloc_lint",
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/bloc_lint-0.3.7",
       "packageUri": "lib/",
       "languageVersion": "3.7"
-    },
-    {
-      "name": "bolt",
-      "rootUri": "../../../",
-      "packageUri": "lib/",
-      "languageVersion": "3.2"
     },
     {
       "name": "boolean_selector",

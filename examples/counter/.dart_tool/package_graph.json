@@ -7,7 +7,7 @@
       "name": "counter",
       "version": "1.0.0",
       "dependencies": [
-        "bolt",
+        "bloc_bolt",
         "flutter",
         "flutter_bloc"
       ],
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "name": "bolt",
+      "name": "bloc_bolt",
       "version": "0.1.0",
       "dependencies": [
         "bloc"

@@ -1,4 +1,4 @@
-import 'package:bolt/bolt.dart';
+import 'package:bloc_bolt/bloc_bolt.dart';
 
 import '../../../counter.dart';
 

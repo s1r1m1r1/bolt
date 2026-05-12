@@ -33,6 +33,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.2.1"
+  bloc_bolt:
+    dependency: "direct main"
+    description:
+      path: "../.."
+      relative: true
+    source: path
+    version: "0.1.0"
   bloc_lint:
     dependency: "direct dev"
     description:
@@ -41,13 +48,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.7"
-  bolt:
-    dependency: "direct main"
-    description:
-      path: "../.."
-      relative: true
-    source: path
-    version: "0.1.0"
   boolean_selector:
     dependency: transitive
     description:
