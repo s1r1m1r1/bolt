@@ -79,3 +79,20 @@ Future<void> onEvent(CounterEvent event) async {
   }
 }
 ```
+
+```dart
+@override
+Future<void> onEvent(CounterEvent event) async {
+  switch (event) {
+    case Decrement():
+      try {
+        await networkRepository.sync();
+        emit(state - 1);
+      } catch (error, stackTrace) {
+        // Handle locally or pass explicitly to BlocBase error stream
+        emit(CounterErrorState('Sync failed'));
+        addError(error, stackTrace);
+      }
+  }
+}
+```
