@@ -85,9 +85,9 @@ class RiverpodBenchmark extends Notifier<int> {
 }
 
 class BenchmarkRunner {
-  static const int iterations = 100000; // Оптимально для замера подписок
+  static const int iterations = 10000; // Оптимально для замера подписок
   static const int stepsPerIteration = 10;
-  static const int subscriberCount = 15; // Количество подписчиков на контейнер
+  static const int subscriberCount = 30; // Количество подписчиков на контейнер
 
   Future<void> run() async {
     print('Running State Management Benchmark Suite (Multi-Subscriber)');

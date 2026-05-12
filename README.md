@@ -8,16 +8,16 @@ Bolt bridges the gap between `Cubit` and `Bloc`: it provides the strict event-dr
 
 Not all state managers scale the same way. Bolt is highly optimized for **real-world UI scenarios** (1–5 active subscribers per screen via `BlocBuilder`/`BlocListener`), where it outperforms complex reactive graphs.
 
-### Benchmark Results (100,000 Iterations)
+### Benchmark Results (10,000 Iterations)
 *Measured in average time per iteration (microseconds / μs) across different subscriber densities.*
 
 
 | Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | Leader |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1 Subscriber** | 2.405 | **2.146** | 4.344 | 23.167 | **Cubit / Bolt** |
-| **5 Subscribers** | 6.669 | **6.314** | 6.700 | 27.331 | **Cubit / Bolt** |
-| **15 Subscribers** | 16.376 | 15.924 | **11.497** | 38.027 | **Riverpod** |
-| **30 Subscribers** | 32.045 | 31.149 | **19.497** | 54.608 | **Riverpod** |
+| **1 Subscriber** | 7.1 | **4.96** | 10.45 | 30.8 | **Cubit / Bolt** |
+| **5 Subscribers** | 12.26 | **7.2** | 13.252 | 35.6 | **Cubit / Bolt** |
+| **15 Subscribers** | 20.8 | 18.5 | **18.48** | 46.7 | **Riverpod** |
+| **30 Subscribers** | 37.3 | 35.15 | **25.86** | 63.49 | **Riverpod** |
 
 ### Architectural Insights: Why the lines cross?
 *   **Bolt vs Bloc (10x - 2x speedup):** By removing the inbound stream queue, Bolt reduces processing latency dramatically. The event is dispatched to `onEvent` instantly and synchronously.
