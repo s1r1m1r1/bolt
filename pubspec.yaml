@@ -1,0 +1,15 @@
+name: bolt
+description: Event based state management inspired by Bloc , Cubit .
+version: 0.1.0
+topics: [bloc, state-management]
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
+
+dependencies:
+  bloc: ^9.0.0
+
+dev_dependencies:
+  bloc_lint: ^0.3.2
+  mocktail: ^1.0.0
+  test: ^1.18.2
