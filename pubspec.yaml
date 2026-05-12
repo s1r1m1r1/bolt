@@ -2,6 +2,7 @@ name: bloc_bolt
 description: Event based state management inspired by Bloc , Cubit .
 version: 0.1.0
 topics: [bloc, state-management]
+homepage: "https://github.com/s1r1m1r1/bloc_bolt"
 
 environment:
   sdk: ">=3.2.0 <4.0.0"
