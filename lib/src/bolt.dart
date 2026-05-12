@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:bolt/src/observer.dart';
+import 'package:bloc_bolt/src/observer.dart';
 
 /// Bolt simple Bloc implementation ,
 /// simple and fast , without the overhead
@@ -16,10 +16,10 @@ abstract class Bolt<Event extends Object, State> extends BlocBase<State> {
     try {
       final result = onEvent(event);
       if (result is Future) {
-        result.catchError((e, s) => errorObserver(this, e, s));
+        result.catchError(addError);
       }
     } catch (e, s) {
-      errorObserver(this, e, s);
+      addError(e, s);
     }
   }
 

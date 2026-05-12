@@ -8,12 +8,6 @@
       "languageVersion": "3.9"
     },
     {
-      "name": "alien_signals",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/alien_signals-2.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.8"
-    },
-    {
       "name": "analyzer",
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/analyzer-8.4.1",
       "packageUri": "lib/",
@@ -33,7 +27,7 @@
     },
     {
       "name": "bloc",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/bloc-9.2.0",
+      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/bloc-9.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -48,12 +42,6 @@
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/boolean_selector-2.1.2",
       "packageUri": "lib/",
       "languageVersion": "3.1"
-    },
-    {
-      "name": "characters",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/characters-1.4.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.4"
     },
     {
       "name": "checked_yaml",
@@ -96,12 +84,6 @@
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/file-7.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
-    },
-    {
-      "name": "flutter",
-      "rootUri": "file:///Users/today/.asdf/installs/flutter/3.43.0-0.2.pre-beta/packages/flutter",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
     },
     {
       "name": "frontend_server_client",
@@ -152,14 +134,8 @@
       "languageVersion": "3.10"
     },
     {
-      "name": "material_color_utilities",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/material_color_utilities-0.13.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "meta",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/meta-1.18.0",
+      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/meta-1.18.2",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -200,12 +176,6 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "preact_signals",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/preact_signals-1.9.4",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
       "name": "pub_semver",
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/pub_semver-2.2.0",
       "packageUri": "lib/",
@@ -216,12 +186,6 @@
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/pubspec_lock_parse-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.14"
-    },
-    {
-      "name": "rxdart",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/rxdart-0.28.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "shelf",
@@ -248,30 +212,6 @@
       "languageVersion": "3.5"
     },
     {
-      "name": "signals",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/signals-6.3.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "signals_core",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/signals_core-6.2.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "signals_flutter",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/signals_flutter-6.3.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.5"
-    },
-    {
-      "name": "sky_engine",
-      "rootUri": "file:///Users/today/.asdf/installs/flutter/3.43.0-0.2.pre-beta/bin/cache/pkg/sky_engine",
-      "packageUri": "lib/",
-      "languageVersion": "3.10"
-    },
-    {
       "name": "source_map_stack_trace",
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/source_map_stack_trace-2.1.2",
       "packageUri": "lib/",
@@ -296,22 +236,10 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "state_notifier",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/state_notifier-1.0.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "stream_channel",
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/stream_channel-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "3.3"
-    },
-    {
-      "name": "stream_transform",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/stream_transform-2.1.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
     },
     {
       "name": "string_scanner",
@@ -348,12 +276,6 @@
       "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/typed_data-1.4.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
-    },
-    {
-      "name": "vector_math",
-      "rootUri": "file:///Users/today/.pub-cache/hosted/pub.dev/vector_math-2.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
     },
     {
       "name": "vm_service",
@@ -398,7 +320,7 @@
       "languageVersion": "3.4"
     },
     {
-      "name": "bolt",
+      "name": "bloc_bolt",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.2"
