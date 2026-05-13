@@ -1,4 +1,4 @@
-# BoltStateNotifier ⚡
+# Bolt ⚡
 
 A minimal, ultra-high-performance event-driven state management on top of StateNotifier.
 ## Features
