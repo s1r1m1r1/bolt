@@ -218,7 +218,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   final riverpodProviderWarmup =
       NotifierProvider<RiverpodBenchmark, int>(RiverpodBenchmark.new);
 
-  for (int i = 0; i < 10000; i++) {
+  for (int i = 0; i < 100000; i++) {
     boltWarmup.add(BoltEvent.increment);
     cubitWarmup.increment();
     containerWarmup.read(riverpodProviderWarmup.notifier).increment();
