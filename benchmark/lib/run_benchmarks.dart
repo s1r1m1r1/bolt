@@ -169,7 +169,7 @@ class MobxBenchmark {
 class BenchmarkResult {
   final int subscribers;
   final double bolt;
-  final double firebolt;
+  final double bolt_notifier;
   final double cubit;
   final double riverpod;
   final double bloc;
@@ -179,7 +179,7 @@ class BenchmarkResult {
   BenchmarkResult({
     required this.subscribers,
     required this.bolt,
-    required this.firebolt,
+    required this.bolt_notifier,
     required this.cubit,
     required this.riverpod,
     required this.bloc,
@@ -190,7 +190,7 @@ class BenchmarkResult {
   String get leader {
     final values = {
       'Bolt': bolt,
-      'FireBolt': firebolt,
+      'BoltStateNotifier': bolt_notifier,
       'Cubit': cubit,
       'Riverpod': riverpod,
       'Bloc': bloc,
@@ -258,7 +258,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     bolt.dispose();
   }
   fireboltStopwatch.stop();
-  final fireboltTime = fireboltStopwatch.elapsedMicroseconds / iterations;
+  final boltNotifierTime = fireboltStopwatch.elapsedMicroseconds / iterations;
 
   // Bolt
   final boltStopwatch = Stopwatch()..start();
@@ -477,7 +477,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   return BenchmarkResult(
     subscribers: subscribers,
     bolt: boltTime,
-    firebolt: fireboltTime,
+    bolt_notifier: boltNotifierTime,
     cubit: cubitTime,
     riverpod: riverpodTime,
     bloc: blocTime,
@@ -500,7 +500,7 @@ Future<void> main() async {
   // Generate Results.md
   var markdown = '''# Benchmark Results
 
-| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | FireBolt (μs) | Leader |
+| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | BoltStateNotifier (μs) | Leader |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 ''';
 
@@ -509,7 +509,7 @@ Future<void> main() async {
         ? '1 Subscriber'
         : '${result.subscribers} Subscribers';
     markdown +=
-        '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | ${result.format(result.value_notifier)} | ${result.format(result.firebolt)} | **${result.leader}** |\n';
+        '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | ${result.format(result.value_notifier)} | ${result.format(result.bolt_notifier)} | **${result.leader}** |\n';
   }
 
   // Write to parent directory (packages/bolt)
