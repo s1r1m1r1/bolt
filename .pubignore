@@ -1,12 +1,45 @@
-# Исключаем папку с бенчмарками
-benchmark/
+# Build artifacts
+build/
+example/**/build/
 
-# Исключаем конфигурацию локального линтера и инструменты тестирования
-.github/
-.idea/
+# Dart/Flutter tooling
+.dart_tool/
+.pub/
+pubspec.lock
+
+# IDE and editor files
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated files
+**/*.g.dart
+**/*.freezed.dart
+**/*.pb.dart
+
+# Logs
 *.log
 
-# Файлы сборки (если есть)
-build/
-.dart_tool/
+# Coverage
+coverage/
+
+# Test artifacts
+test_driver/
+
+# Benchmark files
+benchmark/
+
+# GitHub files
+.github/
+
+# All files in .dart_tool (explicit patterns)
+.dart_tool/*
+.dart_tool/**/*
+benchmark/.dart_tool/*
+benchmark/.dart_tool/**/*

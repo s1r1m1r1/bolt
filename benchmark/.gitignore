@@ -1,0 +1,24 @@
+# Dart/Flutter tooling
+.dart_tool/
+.pub/
+pubspec.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Test artifacts
+test_driver/
