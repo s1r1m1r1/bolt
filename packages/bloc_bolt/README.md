@@ -8,26 +8,11 @@ Bolt bridges the gap between `Cubit` and `Bloc`: it provides the strict event-dr
 
 Not all state managers scale the same way. Bolt is highly optimized for **real-world UI scenarios** (1–5 active subscribers per screen via `BlocBuilder`/`BlocListener`), where it outperforms complex reactive graphs.
 
-### Benchmark Results (10,000 Iterations)
-*Measured in average time per iteration (microseconds / μs) across different subscriber densities.*
-
-
-| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | Leader |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **1 Subscriber** | 7.1 | **4.96** | 10.45 | 30.8 | **Cubit / Bolt** |
-| **5 Subscribers** | 12.26 | **7.2** | 13.252 | 35.6 | **Cubit / Bolt** |
-| **15 Subscribers** | 20.8 | 18.5 | **18.48** | 46.7 | **Riverpod** |
-| **30 Subscribers** | 37.3 | 35.15 | **25.86** | 63.49 | **Riverpod** |
-
-### Architectural Insights
-*   **The Fixed Event Cost:** Bolt maintains a remarkably stable overhead of **~2.1 μs** compared to Cubit across all subscriber counts. This is the exact runtime cost of Dart's type-dispatching (`switch` pattern matching over `sealed` classes). You get a strict event contract virtually for free.
-*   **Cold Start Performance:** In shorter runs (10k iterations), Cubit shines because direct method invocations require less initial JIT-compiler optimization than dynamic type matching.
-*   **The 15-Subscriber Cross:** Riverpod's ultra-cheap notification loop catches up with Cubit/Bolt around the 15-subscriber mark. However, for standard Flutter views (typically 1–5 widgets using `BlocBuilder` per screen), Bolt remains **~10% to 45% faster** than Riverpod while running circles around native `Bloc`.
 
 ### Architectural Insights: Why the lines cross?
 *   **Bolt vs Bloc (10x - 2x speedup):** By removing the inbound stream queue, Bolt reduces processing latency dramatically. The event is dispatched to `onEvent` instantly and synchronously.
 *   **Bolt vs Cubit (The Event-Driven "Tax"):** Bolt runs neck-and-neck with Cubit. Modern Dart VM compiles `sealed` class pattern matching down to highly optimized integer Jump Tables, making the event-driven routing virtually free.
-*   **The Riverpod Inflection Point:** At 15+ subscribers, Riverpod's internal synchronous `LinkedList` notification loop becomes cheaper than Dart's native `StreamController.broadcast()`. However, at typical UI scales (1–5 subscribers), Bolt wins by **~45%** because it doesn't pay the heavy infrastructure allocation tax (`ProviderContainer`) required by Riverpod on every lifecycle.
+
 
 ## Features
 
