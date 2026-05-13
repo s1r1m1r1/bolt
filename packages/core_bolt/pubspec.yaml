@@ -1,0 +1,8 @@
+name: core_bolt
+description: Interface for Bolt .
+version: 0.1.0
+topics: [state-management]
+homepage: "https://github.com/s1r1m1r1/bloc_bolt"
+
+environment:
+  sdk: ">=3.2.0 <4.0.0"
