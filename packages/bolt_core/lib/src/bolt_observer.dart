@@ -1,4 +1,4 @@
-import '../core_bolt.dart';
+import '../bolt_core.dart';
 
 base class BoltObserver {
   const BoltObserver();

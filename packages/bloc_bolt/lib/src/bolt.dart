@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:bolt_core/core_bolt.dart';
+import 'package:bolt_core/bolt_core.dart';
 
 /// Bolt simple Bloc implementation ,
 /// simple and fast , without the overhead

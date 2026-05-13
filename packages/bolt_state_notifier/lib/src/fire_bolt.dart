@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bolt_core/core_bolt.dart';
-import 'package:bolt_core/core_bolt.dart' as core;
+import 'package:bolt_core/bolt_core.dart';
+import 'package:bolt_core/bolt_core.dart' as core;
 import 'package:state_notifier/state_notifier.dart';
 
 /// Bolt simple Event driven state management based on state_notifier,
