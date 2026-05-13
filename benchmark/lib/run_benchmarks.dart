@@ -214,6 +214,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   // Warmup
   final boltWarmup = BoltBenchmark();
   final cubitWarmup = CubitBenchmark();
+  final blocWarmup = BlocBenchmark();
   final containerWarmup = ProviderContainer();
   final riverpodProviderWarmup =
       NotifierProvider<RiverpodBenchmark, int>(RiverpodBenchmark.new);
@@ -221,10 +222,12 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   for (int i = 0; i < 100000; i++) {
     boltWarmup.add(BoltEvent.increment);
     cubitWarmup.increment();
+    blocWarmup.add(const CounterIncrement());
     containerWarmup.read(riverpodProviderWarmup.notifier).increment();
   }
   await boltWarmup.close();
   await cubitWarmup.close();
+  await blocWarmup.close();
   containerWarmup.dispose();
 
   await Future.delayed(const Duration(milliseconds: 500));
