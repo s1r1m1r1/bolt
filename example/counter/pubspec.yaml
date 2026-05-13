@@ -8,8 +8,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bloc_bolt:
-    path: ../../
+  # bloc_bolt:
+  # path: ../../
   flutter_bloc: ^9.0.0
 
 dev_dependencies:

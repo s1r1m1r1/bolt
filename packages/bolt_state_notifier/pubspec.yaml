@@ -1,0 +1,14 @@
+name: bolt_state_notifier
+description: Fire-based state management for Bolt .
+version: 0.1.0
+topics: [state-management]
+repository: github.com/s1r1m1r1/bolt
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  bolt_core: any
+  state_notifier: ^1.0.0
+
+resolution: workspace

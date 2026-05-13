@@ -5,13 +5,15 @@ topics: [bloc, state-management]
 homepage: "https://github.com/s1r1m1r1/bloc_bolt"
 
 environment:
-  sdk: ">=3.2.0 <4.0.0"
+  sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
   bloc: ^9.0.0
-  core_bolt: ^0.1.0
+  bolt_core: any
 
 dev_dependencies:
   bloc_lint: ^0.3.2
   mocktail: ^1.0.0
   test: ^1.18.2
+
+resolution: workspace
