@@ -494,7 +494,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
 
 Future<void> main() async {
   final results = <BenchmarkResult>[];
-  final subscriberCounts = [1, 5, 15, 30];
+  final subscriberCounts = [1, 5, 10, 15];
 
   for (final count in subscriberCounts) {
     print('Running benchmark with $count subscribers...');

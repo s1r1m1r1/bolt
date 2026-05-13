@@ -2,7 +2,7 @@
 
 | Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | BoltStateNotifier (μs) | Leader |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **1 Subscriber** | 3.10 | 2.21 | 8.32 | 24.07 | 7.72 | 2.17 | 3.89 | **StateNotifier** |
-| **5 Subscribers** | 6.37 | 7.37 | 7.92 | 26.80 | 9.10 | 3.32 | 4.46 | **StateNotifier** |
-| **15 Subscribers** | 16.64 | 16.70 | 11.99 | 38.18 | 19.24 | 7.60 | 7.35 | **BoltStateNotifier** |
-| **30 Subscribers** | 32.39 | 33.94 | 18.22 | 55.35 | 35.03 | 11.40 | 11.13 | **BoltStateNotifier** |
+| **1 Subscriber** | 3.08 | 3.28 | 10.38 | 23.10 | 7.00 | 1.06 | 3.85 | **StateNotifier** |
+| **5 Subscribers** | 6.49 | 6.81 | 8.47 | 24.62 | 8.89 | 3.21 | 3.95 | **StateNotifier** |
+| **10 Subscribers** | 11.33 | 13.22 | 9.67 | 31.10 | 14.45 | 4.07 | 6.17 | **StateNotifier** |
+| **15 Subscribers** | 16.52 | 18.06 | 11.08 | 35.37 | 20.29 | 6.93 | 7.64 | **StateNotifier** |
