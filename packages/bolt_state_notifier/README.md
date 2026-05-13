@@ -1,6 +1,6 @@
-# BoltStateNotifier ⚡
+# Bolt ⚡
 
-A minimal, ultra-high-performance event-driven state management on top of StateNotifier.
+A minimal, ultra-high-performance event-driven state management .
 ## Features
 
 - **Strict Event-Driven Contract:** Keep your business logic isolated. UI only communicates via explicit events.
@@ -21,14 +21,14 @@ class Decrement extends CounterEvent { const Decrement(); }
 Implement the synchronous/asynchronous `onEvent` handler:
 
 ```dart
-class CounterBolt extends BoltStateNotifier<CounterEvent, int> {
+class CounterBolt extends Bolt<CounterEvent, int> {
   CounterBolt() : super(0);
 
   @override
   void onEvent(CounterEvent event) {
     switch (event) {
-      case Increment(): state =state + 1;
-      case Decrement(): state =state - 1;
+      case Increment(): emit(state + 1);
+      case Decrement(): emit(state - 1);
     }
   }
 }
