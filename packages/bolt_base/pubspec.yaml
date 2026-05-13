@@ -6,4 +6,5 @@ homepage: "https://github.com/s1r1m1r1/bolt"
 
 environment:
   sdk: ">=3.10.0 <4.0.0"
+
 resolution: workspace
