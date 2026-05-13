@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:mobx/mobx.dart';
+import 'package:state_notifier/state_notifier.dart';
 
 // ==========================================
 // 1. РЕАЛИЗАЦИЯ КАРКАСА BOLT
@@ -78,8 +79,15 @@ class RiverpodBenchmark extends Notifier<int> {
   void decrement() => state = state - 1;
 }
 
+class StateNotifierBenchmark extends StateNotifier<int> {
+  StateNotifierBenchmark() : super(0);
+
+  void increment() => state = state + 1;
+  void decrement() => state = state - 1;
+}
+
 // ==========================================
-// 4. MOX BENCHMARK
+// 5. MOX BENCHMARK
 // ==========================================
 class MobxBenchmark {
   final _count = Observable(0);
@@ -102,7 +110,7 @@ class MobxBenchmark {
 }
 
 // ==========================================
-// 5. БЕНЧМАРК РЕЗУЛЬТАТЫ
+// 6. БЕНЧМАРК РЕЗУЛЬТАТЫ
 // ==========================================
 class BenchmarkResult {
   final int subscribers;
@@ -111,6 +119,7 @@ class BenchmarkResult {
   final double riverpod;
   final double bloc;
   final double mobx;
+  final double value_notifier;
 
   BenchmarkResult({
     required this.subscribers,
@@ -119,6 +128,7 @@ class BenchmarkResult {
     required this.riverpod,
     required this.bloc,
     required this.mobx,
+    required this.value_notifier,
   });
 
   String get leader {
@@ -128,9 +138,13 @@ class BenchmarkResult {
       'Riverpod': riverpod,
       'Bloc': bloc,
       'MobX': mobx,
+      'StateNotifier': value_notifier,
     };
     final min = values.values.reduce((a, b) => a < b ? a : b);
-    return values.entries.where((e) => e.value == min).map((e) => e.key).join(' / ');
+    return values.entries
+        .where((e) => e.value == min)
+        .map((e) => e.key)
+        .join(' / ');
   }
 
   String format(double value) => value.toStringAsFixed(2);
@@ -178,7 +192,9 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     }
 
     for (int j = 0; j < stepsPerIteration; j++) {
-      bolt..add(BoltEvent.increment)..add(BoltEvent.decrement);
+      bolt
+        ..add(BoltEvent.increment)
+        ..add(BoltEvent.decrement);
     }
 
     await completer.future;
@@ -212,7 +228,9 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     }
 
     for (int j = 0; j < stepsPerIteration; j++) {
-      cubit..increment()..decrement();
+      cubit
+        ..increment()
+        ..decrement();
     }
 
     await completer.future;
@@ -285,7 +303,9 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     }
 
     for (int j = 0; j < stepsPerIteration; j++) {
-      bloc..add(const CounterIncrement())..add(const CounterDecrement());
+      bloc
+        ..add(const CounterIncrement())
+        ..add(const CounterDecrement());
     }
 
     await completer.future;
@@ -319,7 +339,9 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     }
 
     for (int j = 0; j < stepsPerIteration; j++) {
-      mobx..increment()..decrement();
+      mobx
+        ..increment()
+        ..decrement();
     }
 
     await completer.future;
@@ -330,6 +352,41 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   mobxStopwatch.stop();
   final mobxTime = mobxStopwatch.elapsedMicroseconds / iterations;
 
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  // ValueNotifier
+  final valueNotifierStopwatch = Stopwatch()..start();
+  for (int i = 0; i < iterations; i++) {
+    final stateNotifier = StateNotifierBenchmark();
+    var receivedCount = 0;
+    final expectedCount = stepsPerIteration * 2 * subscribers;
+    final completer = Completer<void>();
+    final subscriptions = <StreamSubscription<int>>[];
+
+    for (int s = 0; s < subscribers; s++) {
+      final listener = (int value) {
+        receivedCount++;
+        if (receivedCount >= expectedCount && !completer.isCompleted) {
+          completer.complete();
+        }
+      };
+      stateNotifier.addListener(listener);
+      // final sub = valueNotifier.stream.listen((_) {});
+    }
+
+    for (int j = 0; j < stepsPerIteration; j++) {
+      stateNotifier
+        ..increment()
+        ..decrement();
+    }
+
+    await completer.future;
+    stateNotifier.dispose();
+  }
+  valueNotifierStopwatch.stop();
+  final valueNotifierTime =
+      valueNotifierStopwatch.elapsedMicroseconds / iterations;
+
   return BenchmarkResult(
     subscribers: subscribers,
     bolt: boltTime,
@@ -337,6 +394,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     riverpod: riverpodTime,
     bloc: blocTime,
     mobx: mobxTime,
+    value_notifier: valueNotifierTime,
   );
 }
 
@@ -354,13 +412,16 @@ Future<void> main() async {
   // Generate Results.md
   var markdown = '''# Benchmark Results
 
-| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | Leader |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | Leader |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 ''';
 
   for (final result in results) {
-    final subscriberText = result.subscribers == 1 ? '1 Subscriber' : '${result.subscribers} Subscribers';
-    markdown += '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | **${result.leader}** |\n';
+    final subscriberText = result.subscribers == 1
+        ? '1 Subscriber'
+        : '${result.subscribers} Subscribers';
+    markdown +=
+        '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | ${result.format(result.value_notifier)} | **${result.leader}** |\n';
   }
 
   // Write to parent directory (packages/bolt)

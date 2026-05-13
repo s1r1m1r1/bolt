@@ -86,7 +86,30 @@ class RiverpodBenchmark extends Notifier<int> {
 }
 
 // ==========================================
-// 4. MOX BENCHMARK
+// 4. VALUENOTIFIER BENCHMARK (Custom Implementation)
+// ==========================================
+class ValueNotifierBenchmark {
+  int _value;
+  final _controller = StreamController<int>.broadcast();
+
+  ValueNotifierBenchmark(int initialValue) : _value = initialValue;
+
+  int get value => _value;
+
+  set value(int newValue) {
+    if (_value == newValue) return;
+    _value = newValue;
+    _controller.add(newValue);
+  }
+
+  void increment() => value = _value + 1;
+  void decrement() => value = _value - 1;
+
+  Stream<int> get stream => _controller.stream;
+}
+
+// ==========================================
+// 5. MOX BENCHMARK
 // ==========================================
 class MobxBenchmark {
   final _count = Observable(0);
@@ -141,6 +164,9 @@ class BenchmarkRunner {
 
     await Future.delayed(const Duration(milliseconds: 500));
     await _benchmarkMobx();
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _benchmarkValueNotifier();
 
     print('\n===========================================================');
     print('Benchmark complete.');
@@ -352,6 +378,45 @@ class BenchmarkRunner {
 
       for (int j = 0; j < stepsPerIteration; j++) {
         mobx
+          ..increment()
+          ..decrement();
+      }
+
+      await completer.future;
+      for (final sub in subscriptions) {
+        await sub.cancel();
+      }
+    }
+
+    stopwatch.stop();
+    _printResults(stopwatch.elapsedMicroseconds);
+  }
+
+  Future<void> _benchmarkValueNotifier() async {
+    print('------------------------------------------------');
+    print('Benchmark: ValueNotifier (with $subscriberCount subscribers)');
+
+    final stopwatch = Stopwatch()..start();
+
+    for (int i = 0; i < iterations; i++) {
+      final valueNotifier = ValueNotifierBenchmark(0);
+      var receivedCount = 0;
+      final expectedCount = stepsPerIteration * 2 * subscriberCount;
+      final completer = Completer<void>();
+      final subscriptions = <StreamSubscription<int>>[];
+
+      for (int s = 0; s < subscriberCount; s++) {
+        final sub = valueNotifier.stream.listen((_) {
+          receivedCount++;
+          if (receivedCount >= expectedCount && !completer.isCompleted) {
+            completer.complete();
+          }
+        });
+        subscriptions.add(sub);
+      }
+
+      for (int j = 0; j < stepsPerIteration; j++) {
+        valueNotifier
           ..increment()
           ..decrement();
       }

@@ -8,7 +8,10 @@ environment:
 dependencies:
   bloc: ^9.0.0
   riverpod: ^2.6.0
+  state_notifier:
   mobx: ^2.2.1
+  flutter:
+    sdk: flutter
   bloc_bolt:
     path: ../
 
