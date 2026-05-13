@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:riverpod/riverpod.dart';
+import 'package:mobx/mobx.dart';
 
 // ==========================================
 // 3. RANNER БЕНЧМАРКА (5 ПОДПИСЧИКОВ)
@@ -84,6 +85,29 @@ class RiverpodBenchmark extends Notifier<int> {
   void decrement() => state = state - 1;
 }
 
+// ==========================================
+// 4. MOX BENCHMARK
+// ==========================================
+class MobxBenchmark {
+  final _count = Observable(0);
+  final _controller = StreamController<int>.broadcast();
+
+  MobxBenchmark() {
+    _count.observe((change) {
+      final v = change.newValue;
+      if (v == null) return;
+      _controller.add(v);
+    });
+  }
+
+  int get count => _count.value;
+
+  Stream<int> get stream => _controller.stream;
+
+  void increment() => _count.value++;
+  void decrement() => _count.value--;
+}
+
 class BenchmarkRunner {
   static const int iterations = 10000; // Оптимально для замера подписок
   static const int stepsPerIteration = 10;
@@ -114,6 +138,9 @@ class BenchmarkRunner {
 
     await Future.delayed(const Duration(milliseconds: 500));
     await _benchmarkBloc();
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _benchmarkMobx();
 
     print('\n===========================================================');
     print('Benchmark complete.');
@@ -294,6 +321,45 @@ class BenchmarkRunner {
         await sub.cancel();
       }
       await bloc.close();
+    }
+
+    stopwatch.stop();
+    _printResults(stopwatch.elapsedMicroseconds);
+  }
+
+  Future<void> _benchmarkMobx() async {
+    print('------------------------------------------------');
+    print('Benchmark: MobX (with $subscriberCount subscribers)');
+
+    final stopwatch = Stopwatch()..start();
+
+    for (int i = 0; i < iterations; i++) {
+      final mobx = MobxBenchmark();
+      var receivedCount = 0;
+      final expectedCount = stepsPerIteration * 2 * subscriberCount;
+      final completer = Completer<void>();
+      final subscriptions = <StreamSubscription<int>>[];
+
+      for (int s = 0; s < subscriberCount; s++) {
+        final sub = mobx.stream.listen((_) {
+          receivedCount++;
+          if (receivedCount >= expectedCount && !completer.isCompleted) {
+            completer.complete();
+          }
+        });
+        subscriptions.add(sub);
+      }
+
+      for (int j = 0; j < stepsPerIteration; j++) {
+        mobx
+          ..increment()
+          ..decrement();
+      }
+
+      await completer.future;
+      for (final sub in subscriptions) {
+        await sub.cancel();
+      }
     }
 
     stopwatch.stop();

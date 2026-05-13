@@ -8,6 +8,7 @@ environment:
 dependencies:
   bloc: ^9.0.0
   riverpod: ^2.6.0
+  mobx: ^2.2.1
   bloc_bolt:
     path: ../
 
