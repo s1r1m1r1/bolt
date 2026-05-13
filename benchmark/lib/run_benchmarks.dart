@@ -5,9 +5,6 @@ import 'package:riverpod/riverpod.dart';
 import 'package:mobx/mobx.dart';
 import 'package:state_notifier/state_notifier.dart';
 
-// ==========================================
-// 1. РЕАЛИЗАЦИЯ КАРКАСА BOLT
-// ==========================================
 abstract class Bolt<Event extends Object, State> extends BlocBase<State> {
   Bolt(super.initialState);
 
@@ -25,9 +22,54 @@ abstract class Bolt<Event extends Object, State> extends BlocBase<State> {
   FutureOr<void> onEvent(Event event);
 }
 
-// ==========================================
-// 2. МОДЕЛИ И РЕАЛИЗАЦИИ ДЛЯ ТЕСТОВ
-// ==========================================
+/// Bolt simple Bloc implementation ,
+/// simple and fast , without the overhead
+abstract class BoltNotifier<Event extends Object, State>
+    extends StateNotifier<State> {
+  ///
+  BoltNotifier(State initialState) : super(initialState);
+  static BoltNotifierObserver observer = const BoltNotifierObserver();
+
+  /// directly inline , this will be tree shaken when method empty
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  ActionObserver get actionObserver => observer.onAction;
+
+  /// directly inline , this will be tree shaken when method empty
+  @pragma('dart2js:tryInline')
+  @pragma('vm:prefer-inline')
+  // ignore: invalid_use_of_protected_member
+  ErrorObserver get errorObserver => observer.onError;
+
+  /// Adds a new [event] to be processed by the [Bolt].
+  void add(Event event) {
+    actionObserver(this, event);
+
+    try {
+      final result = onEvent(event);
+      if (result is Future) {
+        result.catchError((e, s) => errorObserver(this, e, s));
+      }
+    } catch (e, s) {
+      errorObserver(this, e, s);
+    }
+  }
+
+  /// must be implemented by the user to handle incoming events and emit new states
+  FutureOr<void> onEvent(Event event);
+}
+
+///
+typedef ActionObserver = void Function(
+    BoltNotifier<dynamic, dynamic> blocBase, Object action);
+
+///
+typedef ErrorObserver = void Function(
+  BoltNotifier<dynamic, dynamic> boltNotifier,
+  Object error,
+  StackTrace stackTrace,
+);
+
 sealed class CounterEvent {
   const CounterEvent();
 }
@@ -55,6 +97,21 @@ class BoltBenchmark extends Bolt<BoltEvent, int> {
 
   void _increment() => emit(state + 1);
   void _decrement() => emit(state - 1);
+}
+
+class FireBoltBenchmark extends BoltNotifier<BoltEvent, int> {
+  FireBoltBenchmark() : super(0);
+
+  @override
+  void onEvent(BoltEvent event) {
+    return switch (event) {
+      BoltEvent.increment => _increment(),
+      BoltEvent.decrement => _decrement(),
+    };
+  }
+
+  void _increment() => state = state + 1;
+  void _decrement() => state = state - 1;
 }
 
 class CubitBenchmark extends Cubit<int> {
@@ -86,9 +143,6 @@ class StateNotifierBenchmark extends StateNotifier<int> {
   void decrement() => state = state - 1;
 }
 
-// ==========================================
-// 5. MOX BENCHMARK
-// ==========================================
 class MobxBenchmark {
   final _count = Observable(0);
   final _controller = StreamController<int>.broadcast();
@@ -115,6 +169,7 @@ class MobxBenchmark {
 class BenchmarkResult {
   final int subscribers;
   final double bolt;
+  final double firebolt;
   final double cubit;
   final double riverpod;
   final double bloc;
@@ -124,6 +179,7 @@ class BenchmarkResult {
   BenchmarkResult({
     required this.subscribers,
     required this.bolt,
+    required this.firebolt,
     required this.cubit,
     required this.riverpod,
     required this.bloc,
@@ -134,6 +190,7 @@ class BenchmarkResult {
   String get leader {
     final values = {
       'Bolt': bolt,
+      'FireBolt': firebolt,
       'Cubit': cubit,
       'Riverpod': riverpod,
       'Bloc': bloc,
@@ -171,6 +228,37 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   containerWarmup.dispose();
 
   await Future.delayed(const Duration(milliseconds: 500));
+
+// Bolt
+  final fireboltStopwatch = Stopwatch()..start();
+  for (int i = 0; i < iterations; i++) {
+    final bolt = FireBoltBenchmark();
+    var receivedCount = 0;
+    final expectedCount = stepsPerIteration * 2 * subscribers;
+    final completer = Completer<void>();
+
+    for (int s = 0; s < subscribers; s++) {
+      final listener = (int v) {
+        receivedCount++;
+        if (receivedCount >= expectedCount && !completer.isCompleted) {
+          completer.complete();
+        }
+      };
+      bolt.addListener(listener);
+    }
+
+    for (int j = 0; j < stepsPerIteration; j++) {
+      bolt
+        ..add(BoltEvent.increment)
+        ..add(BoltEvent.decrement);
+    }
+
+    await completer.future;
+
+    bolt.dispose();
+  }
+  fireboltStopwatch.stop();
+  final fireboltTime = fireboltStopwatch.elapsedMicroseconds / iterations;
 
   // Bolt
   final boltStopwatch = Stopwatch()..start();
@@ -361,7 +449,6 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
     var receivedCount = 0;
     final expectedCount = stepsPerIteration * 2 * subscribers;
     final completer = Completer<void>();
-    final subscriptions = <StreamSubscription<int>>[];
 
     for (int s = 0; s < subscribers; s++) {
       final listener = (int value) {
@@ -390,6 +477,7 @@ Future<BenchmarkResult> runBenchmark({required int subscribers}) async {
   return BenchmarkResult(
     subscribers: subscribers,
     bolt: boltTime,
+    firebolt: fireboltTime,
     cubit: cubitTime,
     riverpod: riverpodTime,
     bloc: blocTime,
@@ -412,8 +500,8 @@ Future<void> main() async {
   // Generate Results.md
   var markdown = '''# Benchmark Results
 
-| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | Leader |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| Active Subscribers | Bolt (μs) | Cubit (μs) | Riverpod (μs) | Bloc (μs) | MobX (μs) | StateNotifier (μs) | FireBolt (μs) | Leader |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 ''';
 
   for (final result in results) {
@@ -421,11 +509,22 @@ Future<void> main() async {
         ? '1 Subscriber'
         : '${result.subscribers} Subscribers';
     markdown +=
-        '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | ${result.format(result.value_notifier)} | **${result.leader}** |\n';
+        '| **$subscriberText** | ${result.format(result.bolt)} | ${result.format(result.cubit)} | ${result.format(result.riverpod)} | ${result.format(result.bloc)} | ${result.format(result.mobx)} | ${result.format(result.value_notifier)} | ${result.format(result.firebolt)} | **${result.leader}** |\n';
   }
 
   // Write to parent directory (packages/bolt)
   final file = File('../Results.md');
   await file.writeAsString(markdown);
   print('Results written to ../Results.md');
+}
+
+base class BoltNotifierObserver {
+  const BoltNotifierObserver();
+
+  /// empty , if not used will be tree shaken
+  /// override if needed
+  void onAction(BoltNotifier<dynamic, dynamic> state, Object action) {}
+
+  void onError(BoltNotifier<dynamic, dynamic> state, Object error,
+      StackTrace stackTrace) {}
 }

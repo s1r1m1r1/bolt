@@ -52,12 +52,10 @@ class BoltBenchmark extends Bolt<BoltEvent, int> {
   BoltBenchmark() : super(0);
 
   @override
-  void onEvent(BoltEvent event) {
-    return switch (event) {
-      BoltEvent.increment => _increment(),
-      BoltEvent.decrement => _decrement(),
-    };
-  }
+  void onEvent(BoltEvent event) => switch (event) {
+        BoltEvent.increment => _increment(),
+        BoltEvent.decrement => _decrement(),
+      };
 
   void _increment() => emit(state + 1);
   void _decrement() => emit(state - 1);

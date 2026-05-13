@@ -116,16 +116,20 @@ void main() {
       expect(bolt.caughtErrors.first.toString(), contains('Synchronous crash'));
     });
 
-    test('should automatically catch asynchronous top-level errors from Future',
-        () async {
-      bolt.add(AsyncErrorEvent());
+    test(
+      'should automatically catch asynchronous top-level errors from Future',
+      () async {
+        bolt.add(AsyncErrorEvent());
 
-      // Ждем завершения асинхронного Future внутри onEvent
-      await Future<void>.delayed(const Duration(milliseconds: 20));
+        // Ждем завершения асинхронного Future внутри onEvent
+        await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      expect(bolt.caughtErrors.length, equals(1));
-      expect(
-          bolt.caughtErrors.first.toString(), contains('Asynchronous crash'));
-    });
+        expect(bolt.caughtErrors.length, equals(1));
+        expect(
+          bolt.caughtErrors.first.toString(),
+          contains('Asynchronous crash'),
+        );
+      },
+    );
   });
 }
