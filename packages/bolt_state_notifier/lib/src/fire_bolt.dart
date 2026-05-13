@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:bolt_core/bolt_core.dart';
-import 'package:bolt_core/bolt_core.dart' as core;
+import 'package:bolt_base/bolt_base.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 /// Bolt simple Event driven state management based on state_notifier,
@@ -15,11 +14,11 @@ abstract class BoltStateNotifier<Event extends Object, State>
   /// directly inline , this will be tree shaken when method empty
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  core.ActionObserver get _actionObserver => BoltBase.observer.onAction;
+  ActionObserver get _actionObserver => BoltBase.observer.onAction;
 
   @pragma('dart2js:tryInline')
   @pragma('vm:prefer-inline')
-  core.ErrorObserver get _errorObserver => BoltBase.observer.onError;
+  ErrorObserver get _errorObserver => BoltBase.observer.onError;
 
   /// Adds a new [event] to be processed by the [Bolt].
   void add(Event event) {

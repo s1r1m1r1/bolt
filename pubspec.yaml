@@ -6,6 +6,6 @@ environment:
   sdk: "^3.5.0"
 
 workspace:
-  - packages/bolt_core
+  - packages/bolt_base
   - packages/bloc_bolt
   - packages/bolt_state_notifier

@@ -8,7 +8,7 @@ environment:
   sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
-  bolt_core: any
+  bolt_base: any
   state_notifier: ^1.0.0
 
 resolution: workspace

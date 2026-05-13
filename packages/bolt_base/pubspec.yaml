@@ -1,4 +1,4 @@
-name: bolt_core
+name: bolt_base
 description: Interface for Bolt .
 version: 0.1.0
 topics: [state-management]

@@ -1,4 +1,4 @@
-import '../bolt_core.dart';
+import '../bolt_base.dart';
 
 base class BoltObserver {
   const BoltObserver();
@@ -39,12 +39,11 @@ base class BoltObserver {
 }
 
 /// typedefs for observers and loggers
-typedef ActionObserver =
-    void Function(BoltBase<dynamic, dynamic> boltBase, Object action);
+typedef ActionObserver = void Function(
+    BoltBase<dynamic, dynamic> boltBase, Object action);
 
-typedef ErrorObserver =
-    void Function(
-      BoltBase<dynamic, dynamic> boltBase,
-      Object error,
-      StackTrace stackTrace,
-    );
+typedef ErrorObserver = void Function(
+  BoltBase<dynamic, dynamic> boltBase,
+  Object error,
+  StackTrace stackTrace,
+);
